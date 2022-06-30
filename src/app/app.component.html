@@ -1,7 +1,16 @@
-<div class="map-container">
+
+<div class="map-container" style="width:50%;height:50%">
   <div class="map-frame">
     <div id="map"></div>
   </div>
 </div>
-
+<div style="margin-top: 30%">
+  <h1>stats pour marseille</h1>
+  <p>total des station : {{mapMarker.length}}</p>
+  <p>Stand par station  en moyenn de dispo : {{MedStandAvailable}}</p>
+  <p> station ou ya au moin 1 stand de dispo : {{countStationDispo}}</p>
+  <p>station ou ya plus de place : {{ mapMarker.length- countStationDispo}}</p>
+  <p>nombre de velo electrique sur le reseau : {{electricBikes || 0}}</p>
+  <p>nombre de velo sur le reseau {{bikesTotal}}</p>
+</div>
 <!-- <app-map></app-map> -->

@@ -1,6 +1,7 @@
 import { Component, AfterViewInit } from '@angular/core';
 import * as L from 'leaflet';
 import { HttpClient } from '@angular/common/http';
+import { Chart } from 'chart.js';
 
 @Component({
   selector: 'app-root',
@@ -12,6 +13,11 @@ export class AppComponent implements AfterViewInit {
   private map:any;
   mapMarker: any;
   markers: any;
+  countStandAvailable: number = 0;
+  MedStandAvailable:any
+  countStationDispo: number = 0;
+  electricBikes: number =0;
+  bikesTotal: number = 0;
 
   private initMap(): void {
 
@@ -52,6 +58,19 @@ export class AppComponent implements AfterViewInit {
           data => {
 
             this.mapMarker = data;
+            console.log(this.mapMarker[2].totalStands.availabilities.stands);
+            this.countStandAvailable = 0
+            this.electricBikes = 0
+            this.bikesTotal = 0
+            this.mapMarker.forEach((elm:any) => {
+              this.countStandAvailable += elm.totalStands.availabilities.stands;
+              this.electricBikes += elm.totalStands.availabilities.electricBikes;
+              this.bikesTotal += elm.totalStands.availabilities.bikes;
+              // console.log(elm.totalStands.availabilities.stands);
+            });
+            console.log(this.mapMarker);
+            // console.log(Math.round(this.countStandAvailable / this.mapMarker.length) )
+            this.MedStandAvailable = Math.round(this.countStandAvailable / this.mapMarker.length)
             this.initMap();},
           error => console.error('There was an error!', error)
       )
@@ -66,10 +85,11 @@ export class AppComponent implements AfterViewInit {
     const myIcon = L.icon({
       iconUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.2.0/images/marker-icon.png'
     });
-
+    this.countStationDispo = 0
     this.mapMarker.forEach((elm:any) => {
 
       if(elm.totalStands.availabilities.stands >= 1) {
+        this.countStationDispo += 1
         L.marker([elm.position.latitude, elm.position.longitude], {icon: myIcon}).bindPopup(elm.name + ' stand dispo : '+elm.totalStands.availabilities.stands).addTo(this.markers)
       }
     });
